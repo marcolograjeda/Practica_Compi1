@@ -16,6 +16,8 @@ public class GraficadorBarras {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Vista vista = new Vista();
+        vista.show();
     }
     
 }

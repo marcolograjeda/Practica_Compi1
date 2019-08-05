@@ -1,0 +1,118 @@
+package analizadores;
+import java_cup.runtime.*;
+import hojatrabajo1.*;
+import clases.*;
+
+parser code
+{:
+    public String salida = "";
+    /**
+    * Metodo para error sintactico
+    **/
+    public void syntax_error(Symbol s){
+        System.err.println("Error sintacto línea " + (s.left) +" columna "+s.right+ ". No se esperaba " +s.value+"."); 
+            hojatrabajo1.HojaTrabajo1.erroresSintacticos.add(new Token(0,s.value.toString(), "Sintactico", Integer.toString(s.left), Integer.toString(s.right)));
+        }
+    
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        //System.err.println("Error irrecuperable en la linea " + (s.left)+ " columna " +s.right+". Elemento " + s.value + " no reconocido.");
+    }
+
+:}
+
+terminal String extraer, puntocoma, coma;
+terminal String parentesisa, parentesisc, identificador, num; 
+
+non terminal String S, I;
+non terminal Nodo LISTA;
+precedence left coma;
+
+start with S; 
+S::= I;
+
+I::= extraer parentesisa LISTA:lista parentesisc puntocoma{: 
+    if(lista.contadorTerminales > lista.posInicial + lista.cantidadTerminales - 1){
+        if(lista.sinProblema){
+            salida = lista.imprimir;
+            System.out.println(lista.imprimir);
+        }else{
+            salida = lista.imprimir;
+            System.out.println(lista.imprimir);
+        }
+    }else{
+        salida = "La cantidad de terminales solicitada excede los terminales de la lista";
+        System.out.println("La cantidad de terminales solicitada excede los terminales de la lista");
+    } 
+    :};
+
+LISTA::= LISTA:list coma num:num {:
+        if(list.sinProblema){
+            if(list.contador == 1){
+                try{
+                    if(Integer.parseInt(num) >= 0){
+                        list.cantidadTerminales = Integer.parseInt(num);
+                        list.contador++;
+                        //list.contadorTerminales++;
+                    }else{
+                        list.sinProblema = false;
+                        list.imprimir = "Segundo terminal es negativo";
+                    }
+                }catch(Exception e){
+                    list.sinProblema = false;
+                    list.imprimir = "Segundo terminal es id";
+                }
+            }else if(list.contadorTerminales == list.posInicial && list.cantidadTerminales != 0){
+                list.imprimir = num;
+                list.contador++;
+                list.contadorTerminales++;
+            }else if(list.posInicial<list.contadorTerminales && list.contadorTerminales < list.posInicial + list.cantidadTerminales){
+                list.imprimir += " "+num;
+                list.contador++;
+                list.contadorTerminales++;
+            }else{
+                list.contadorTerminales++;
+            }
+        }
+        //System.out.println(num);
+        RESULT = list;
+        :}
+    | LISTA:list coma identificador:id {:
+        //System.out.println(id);
+        if(list.sinProblema){
+            if(list.contador > 1){
+                if(list.contadorTerminales == list.posInicial && list.cantidadTerminales != 0){
+                    list.imprimir = id;
+                    list.contador++;
+                    //list.contadorTerminales++;
+                }else if(list.contadorTerminales < list.posInicial + list.cantidadTerminales){
+                    list.imprimir += " " + id;
+                    list.contador++;
+                    //list.contadorTerminales++;
+                }
+            }else{
+                list.sinProblema = false;
+                list.imprimir = "Id en la cantidad de terminales";
+            }
+        }
+        list.contadorTerminales++;
+        RESULT = list;
+        :}
+    | num:num {:
+    Nodo nodo = new Nodo();
+    //System.out.println(num);
+    try{
+        Integer.parseInt(num);
+        if(Integer.parseInt(num) > 0){
+            nodo.sinProblema = true;
+            nodo.posInicial = Integer.parseInt(num);
+            nodo.contador++;
+        }else{
+            nodo.sinProblema = false;
+            nodo.imprimir = "Posicion inicial negativa";
+        }
+    }catch(Exception e){
+        nodo.sinProblema = false;
+        nodo.imprimir = "Posicion inicial tiene id";
+    }
+    RESULT = nodo;:}
+;
