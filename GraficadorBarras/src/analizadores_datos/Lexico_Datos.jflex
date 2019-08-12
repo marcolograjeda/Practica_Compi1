@@ -31,7 +31,8 @@ import clases.Token;
 
 espacios = [ |\r|\t|\n|\f]*
 comentario = ["/"]["/"][^\r\n]*[\n|\r|\r\n|\n\r]?
-comentarioMulti = ["/*"]["*"]+["/"] | ["/*"][^*][~"*/"]
+
+comentarioMulti = "/*" [^*] ~"*/" | "/*" "*"+ "/"
 cadena = [\"][^\"\n]*[\"]
 num = ["-"]?[0-9]+
 decimal = ["-"]?[0-9]+["."][0-9]+
@@ -49,7 +50,9 @@ decimal = ["-"]?[0-9]+["."][0-9]+
 
 \n {yychar=1;}
 
-{espacios} {}
+{comentario} { }
+{comentarioMulti} { }
+{espacios} { }
 {num} {return new Symbol(sym.num,yyline,yychar, yytext());}
 {decimal} {return new Symbol(sym.decimal,yyline,yychar, yytext());}
 {cadena} {return new Symbol(sym.cadena,yyline,yychar, yytext());}

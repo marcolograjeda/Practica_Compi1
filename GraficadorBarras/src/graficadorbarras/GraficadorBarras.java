@@ -5,12 +5,18 @@
  */
 package graficadorbarras;
 
+import clases.*;
+import java.util.ArrayList;
+
 /**
  *
  * @author Junior
  */
 public class GraficadorBarras {
-
+    public static ArchivoDatos datos = new ArchivoDatos();
+    public static ArrayList<Token> erroresLexicos = new ArrayList();
+    public static ArrayList<Token> erroresSintacticos = new ArrayList();
+    public static ArrayList<String> erroresSemanticos = new ArrayList();
     /**
      * @param args the command line arguments
      */

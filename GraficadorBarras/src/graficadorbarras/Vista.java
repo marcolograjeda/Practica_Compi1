@@ -5,12 +5,20 @@
  */
 package graficadorbarras;
 
+import clases.ArchivoDatos;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -18,7 +26,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author Junior
  */
 public class Vista extends javax.swing.JFrame {
-
     /**
      * Creates new form Vista
      */
@@ -60,6 +67,11 @@ public class Vista extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txtConsola);
 
         btnCompilar.setText("Compilar");
+        btnCompilar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCompilarMouseClicked(evt);
+            }
+        });
         btnCompilar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCompilarActionPerformed(evt);
@@ -87,9 +99,19 @@ public class Vista extends javax.swing.JFrame {
         jMenu1.add(btnAbrir);
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
         jMenu1.add(btnGuardar);
 
         btnGuardarComo.setText("Guardar Como");
+        btnGuardarComo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarComoActionPerformed(evt);
+            }
+        });
         jMenu1.add(btnGuardarComo);
 
         jMenuBar1.add(jMenu1);
@@ -143,7 +165,7 @@ public class Vista extends javax.swing.JFrame {
         
         try {
             String texto = "";
-                String linea = "";
+            String linea = "";
             JFileChooser abrir = new JFileChooser();
             FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos", "dat", "rep");
             abrir.setFileFilter(filtro);
@@ -153,7 +175,10 @@ public class Vista extends javax.swing.JFrame {
                 panel.setBounds(0, 0, 300, 400);
                 panel.setLayout(null);
                 JTextArea txtArea = new JTextArea();//Crear textArea
-                txtArea.setBounds(0, 0, 590, 340);
+                txtArea.setBounds(5, 0, 310, 300);
+                JScrollBar barras = new JScrollBar();
+                barras.setBounds(0, 0, 375, 340);
+                barras.add(txtArea);
                 panel.add(txtArea);//Agregar el txtArea al panel
                 seleccion = abrir.getSelectedFile();
                 System.out.println(seleccion.getPath());
@@ -207,6 +232,51 @@ public class Vista extends javax.swing.JFrame {
         JTextArea txt = (JTextArea)panelito.getComponent(0);
         System.out.println(txt.getText());
     }//GEN-LAST:event_btnCompilarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        int ind = pestañasPane.getSelectedIndex();
+        JPanel panelito = (JPanel)pestañasPane.getComponent(ind);
+        JTextArea txt = (JTextArea)panelito.getComponent(0);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(txt.getToolTipText(), false));
+            writer.write(txt.getText());
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Guarde");
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarComoActionPerformed
+        // TODO add your handling code here:
+        JFileChooser seleccion = new JFileChooser();
+        if(seleccion.showSaveDialog(seleccion) == JFileChooser.APPROVE_OPTION){
+            File archivo = new File(seleccion.getCurrentDirectory() + "\\" + seleccion.getSelectedFile().getName());
+            int ind = pestañasPane.getSelectedIndex();
+            JPanel panelito = (JPanel)pestañasPane.getComponent(ind);
+            JTextArea txt = (JTextArea)panelito.getComponent(0);
+            txt.setToolTipText(seleccion.getCurrentDirectory() + "\\" + seleccion.getSelectedFile().getName());
+            
+            panelito.setName(seleccion.getName());
+            try {
+                PrintWriter salida = new PrintWriter(archivo);
+                salida.print(txt.getText());
+                salida.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Vista.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnGuardarComoActionPerformed
+
+    private void btnCompilarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCompilarMouseClicked
+        // TODO add your handling code here:
+        int ind = pestañasPane.getSelectedIndex();
+        JPanel panelito = (JPanel)pestañasPane.getComponent(ind);
+        JTextArea txt = (JTextArea)panelito.getComponent(0);
+        AnalizarDatos analizar = new AnalizarDatos();
+        ArchivoDatos revisar = analizar.analisis(txt.getText());
+    }//GEN-LAST:event_btnCompilarMouseClicked
 
     /**
      * @param args the command line arguments

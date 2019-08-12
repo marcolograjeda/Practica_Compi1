@@ -11,7 +11,6 @@ import clases.Token;
         linea = Integer.toString(yyline);
         columna = Integer.toString(yycolumn);
         hojatrabajo1.HojaTrabajo1.listaErrores.add(new Token(0,lexema, tipo, linea, columna));
-
     }
     public ArrayList<Token> listaTokens = HojaTrabajo1.tokens;
     public void agregarToken(int num, String lexema, String tipo){
