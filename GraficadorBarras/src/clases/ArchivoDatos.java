@@ -14,6 +14,4 @@ import java.util.ArrayList;
 public class ArchivoDatos {
     public ArrayList<Clave> claves = new ArrayList();
     public ArrayList<Registro> registros = new ArrayList();
-    
-    
 }

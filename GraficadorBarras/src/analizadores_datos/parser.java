@@ -125,11 +125,11 @@ public class parser extends java_cup.runtime.lr_parser {
     **/
 
     public void errorSemantico(String tipo){
-        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en "+ tipo +" en la linea ");  
+        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en "+ tipo +" en el archivo de datos ");  
     }
     public void syntax_error(Symbol s){
         System.err.println("Error sintacto línea " + (s.left) +" columna "+s.right+ ". No se esperaba " +s.value+"."); 
-            //hojatrabajo1.HojaTrabajo1.erroresSintacticos.add(new Token(0,s.value.toString(), "Sintactico", Integer.toString(s.left), Integer.toString(s.right)));
+            graficadorbarras.GraficadorBarras.erroresSintacticos.add(new Token(0,s.value.toString(), "Sintactico en archivo de datos", Integer.toString(s.left), Integer.toString(s.right)));
         }
     
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
@@ -210,9 +210,34 @@ class CUP$parser$actions {
 		int regisleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int regisright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Registro regis = (Registro)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		if(regis.datos.size() == datos.registros.get(0).datos.size()){
-            datos.registros.add(regis);}else{
-                errorSemantico("diferente largo de registro" + regisleft); 
+		
+            if(regis.datos.size() == datos.registros.get(0).datos.size()){
+                boolean clavesIguales = true;
+                int contador = 0;
+                String datosIncorrectos = "";
+                for(Dato x: regis.datos){
+                    if(x.tipo == 2){
+                        if(datos.registros.get(0).datos.get(contador).tipo != 2){
+                            clavesIguales = false;
+                            datosIncorrectos += x.cadena +" "+x.decimal+" "+ x.num +";" ;
+                            break;
+                        }
+                    }else{
+                        if(datos.registros.get(0).datos.get(contador).tipo == 2){
+                            clavesIguales = false;
+                            datosIncorrectos += x.cadena +" "+x.decimal+" "+ x.num +";" ;
+                            break;
+                        }
+                    }
+                    contador++;
+                }
+                if(clavesIguales){
+                    datos.registros.add(regis);
+                }else{
+                    errorSemantico("tipo de dato incorrecto "); //preguntar para sacar la linea regisleft
+                }
+            }else{
+                errorSemantico("diferente largo de registro "); 
             }
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LISTAR",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

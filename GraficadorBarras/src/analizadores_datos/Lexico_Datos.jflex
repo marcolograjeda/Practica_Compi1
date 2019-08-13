@@ -9,13 +9,9 @@ import clases.Token;
         String linea, columna;
         linea = Integer.toString(yyline);
         columna = Integer.toString(yycolumn);
-        //hojatrabajo1.HojaTrabajo1.listaErrores.add(new Token(0,lexema, tipo, linea, columna));
+        graficadorbarras.GraficadorBarras.erroresSintacticos.add(new Token(0,lexema, tipo, linea, columna));
 
     }
-    //public ArrayList<Token> listaTokens = HojaTrabajo1.tokens;
-    /*public void agregarToken(int num, String lexema, String tipo){
-        listaTokens.add(new Token(num, lexema, tipo, Integer.toString(yyline), Integer.toString(yycolumn)));
-    }*/
 %}
 
 %class Lexico_Datos
@@ -59,5 +55,5 @@ decimal = ["-"]?[0-9]+["."][0-9]+
 
 . {
     System.out.println("Error lexico "+ yytext() +" linea No: "+ yyline+ " columna: " +yychar); 
-    agregarError(yytext(), "No se reconoce");
+    agregarError(yytext(), "Lexico en archivo de datos");
 }

@@ -10,10 +10,10 @@ package clases;
  * @author Junior
  */
 public class Dato {
-    String cadena;
-    int num;
-    double decimal;
-    int tipo;
+    public String cadena;
+    public int num;
+    public double decimal;
+    public int tipo;
     public Dato(int tipo, String cadena, int num, double decimal) {
         this.cadena = cadena;
         this.num = num;

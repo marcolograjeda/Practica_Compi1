@@ -5,7 +5,10 @@
  */
 package graficadorbarras;
 
+import analizadores.Lexico_Reportes;
+import analizadores.parser;
 import clases.ArchivoDatos;
+import clases.Token;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,6 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -167,6 +172,8 @@ public class Vista extends javax.swing.JFrame {
             String texto = "";
             String linea = "";
             JFileChooser abrir = new JFileChooser();
+            File file = new File("F:\\Universidad\\USAC\\2019\\2 Semestre\\Compi 1\\Practica_Compi1\\GraficadorBarras");
+            abrir.setCurrentDirectory(file);
             FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos", "dat", "rep");
             abrir.setFileFilter(filtro);
             File seleccion;
@@ -191,7 +198,6 @@ public class Vista extends javax.swing.JFrame {
                 }else{
                     panel.setToolTipText("0");
                     System.out.println("Tipó 2");
-                    
                 }
                 FileReader lector = new FileReader(seleccion);
                 BufferedReader buf = new BufferedReader(lector);
@@ -225,9 +231,6 @@ public class Vista extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("Compilar");        
         int ind = pestañasPane.getSelectedIndex();
-        
-        System.out.println(pestañasPane.getToolTipTextAt(ind));
-        System.out.println(pestañasPane.getTitleAt(pestañasPane.getSelectedIndex()));
         JPanel panelito = (JPanel)pestañasPane.getComponent(ind);
         JTextArea txt = (JTextArea)panelito.getComponent(0);
         System.out.println(txt.getText());
@@ -271,11 +274,31 @@ public class Vista extends javax.swing.JFrame {
 
     private void btnCompilarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCompilarMouseClicked
         // TODO add your handling code here:
+        graficadorbarras.GraficadorBarras.erroresLexicos = new ArrayList();
+        graficadorbarras.GraficadorBarras.erroresSintacticos = new ArrayList();
+        graficadorbarras.GraficadorBarras.erroresSemanticos = new ArrayList();
         int ind = pestañasPane.getSelectedIndex();
         JPanel panelito = (JPanel)pestañasPane.getComponent(ind);
         JTextArea txt = (JTextArea)panelito.getComponent(0);
-        AnalizarDatos analizar = new AnalizarDatos();
-        ArchivoDatos revisar = analizar.analisis(txt.getText());
+        //AnalizarDatos analizar = new AnalizarDatos();
+        //ArchivoDatos revisar = analizar.analisis(txt.getText());
+        try{
+            StringReader read = new StringReader(txt.getText());
+            Lexico_Reportes lexico = new Lexico_Reportes(read);
+            parser sintactico = new parser(lexico);
+            sintactico.parse();
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        for(Token x:graficadorbarras.GraficadorBarras.erroresLexicos){
+            System.out.println("Error lexico "+x.token);
+        }
+        for(Token x:graficadorbarras.GraficadorBarras.erroresSintacticos){
+            System.out.println("Error sintactico "+x.token);
+        }
+        for(String x:graficadorbarras.GraficadorBarras.erroresSemanticos){
+            System.out.println(x);
+        }
     }//GEN-LAST:event_btnCompilarMouseClicked
 
     /**

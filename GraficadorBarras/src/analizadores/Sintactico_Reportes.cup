@@ -1,118 +1,102 @@
 package analizadores;
 import java_cup.runtime.*;
-import hojatrabajo1.*;
+import graficadorbarras.*;
 import clases.*;
 
-Prueba code
+parser code
 {:
     public String salida = "";
     /**
     * Metodo para error sintactico
     **/
+    public void agregarVariable(String id, Object objeto){
+        graficadorbarras.GraficadorBarras.variables.put(id,objeto);
+    }
+    public void errorSemantico(String tipo){
+        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en "+ tipo +" en el archivo de datos ");  
+    }
     public void syntax_error(Symbol s){
         System.err.println("Error sintacto línea " + (s.left) +" columna "+s.right+ ". No se esperaba " +s.value+"."); 
-            hojatrabajo1.HojaTrabajo1.erroresSintacticos.add(new Token(0,s.value.toString(), "Sintactico", Integer.toString(s.left), Integer.toString(s.right)));
+            graficadorbarras.GraficadorBarras.erroresSintacticos.add(new Token(0,s.value.toString(), "Sintactico en archivo de datos", Integer.toString(s.left), Integer.toString(s.right)));
         }
     
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
         //System.err.println("Error irrecuperable en la linea " + (s.left)+ " columna " +s.right+". Elemento " + s.value + " no reconocido.");
     }
-
 :}
 
-terminal String extraer, puntocoma, coma;
-terminal String parentesisa, parentesisc, identificador, num; 
+terminal String numerico, tipoCadena, archivo, leerarchivo, sumar, contar, promedio, contarsi, obtenersi, graficar, imprimir;
+terminal String menor, mayor, menorigual, mayorigual, igualigual, noigual;
+terminal String coma, puntocoma, igual;
+terminal String parentesisA, parentesisC, identificador, num, decimal, cadena; 
 
-non terminal String S, I;
-non terminal Nodo LISTA;
+non terminal String REP, VAR, IMP, EXP, EXPDA, TIPO, OPERADOR, GRA;
+non terminal Object FUN;
+non terminal Dato DATOS;
 precedence left coma;
 
-start with S; 
-S::= I;
+start with REP; 
+REP::=  REP VAR {::}
+        | REP IMP {::}
+        | REP GRA {::}
+        | GRA {::}
+        | VAR {::}
+        | IMP {::}
+        ;
 
-I::= extraer parentesisa LISTA:lista parentesisc puntocoma{: 
-    if(lista.contadorTerminales > lista.posInicial + lista.cantidadTerminales - 1){
-        if(lista.sinProblema){
-            salida = lista.imprimir;
-            System.out.println(lista.imprimir);
-        }else{
-            salida = lista.imprimir;
-            System.out.println(lista.imprimir);
-        }
-    }else{
-        salida = "La cantidad de terminales solicitada excede los terminales de la lista";
-        System.out.println("La cantidad de terminales solicitada excede los terminales de la lista");
-    } 
-    :};
+IMP::=  imprimir parentesisA EXP parentesisC puntocoma {::}
+        ;
 
-LISTA::= LISTA:list coma num:num {:
-        if(list.sinProblema){
-            if(list.contador == 1){
-                try{
-                    if(Integer.parseInt(num) >= 0){
-                        list.cantidadTerminales = Integer.parseInt(num);
-                        list.contador++;
-                        //list.contadorTerminales++;
-                    }else{
-                        list.sinProblema = false;
-                        list.imprimir = "Segundo terminal es negativo";
-                    }
-                }catch(Exception e){
-                    list.sinProblema = false;
-                    list.imprimir = "Segundo terminal es id";
-                }
-            }else if(list.contadorTerminales == list.posInicial && list.cantidadTerminales != 0){
-                list.imprimir = num;
-                list.contador++;
-                list.contadorTerminales++;
-            }else if(list.posInicial<list.contadorTerminales && list.contadorTerminales < list.posInicial + list.cantidadTerminales){
-                list.imprimir += " "+num;
-                list.contador++;
-                list.contadorTerminales++;
-            }else{
-                list.contadorTerminales++;
-            }
-        }
-        //System.out.println(num);
-        RESULT = list;
-        :}
-    | LISTA:list coma identificador:id {:
-        //System.out.println(id);
-        if(list.sinProblema){
-            if(list.contador > 1){
-                if(list.contadorTerminales == list.posInicial && list.cantidadTerminales != 0){
-                    list.imprimir = id;
-                    list.contador++;
-                    //list.contadorTerminales++;
-                }else if(list.contadorTerminales < list.posInicial + list.cantidadTerminales){
-                    list.imprimir += " " + id;
-                    list.contador++;
-                    //list.contadorTerminales++;
+EXP::=  EXP coma EXPDA {::}
+        | EXPDA {::}
+        ;
+
+EXPDA::= identificador {::}
+        | cadena {::}
+        | num {::}
+        ;
+
+VAR::=  TIPO identificador:id igual FUN:funcion puntocoma {:
+            if(funcion instanceof Integer){
+                if((Integer)funcion != -1){
+                    agregarVariable(id,funcion);
                 }
             }else{
-                list.sinProblema = false;
-                list.imprimir = "Id en la cantidad de terminales";
-            }
-        }
-        list.contadorTerminales++;
-        RESULT = list;
-        :}
-    | num:num {:
-    Nodo nodo = new Nodo();
-    //System.out.println(num);
-    try{
-        Integer.parseInt(num);
-        if(Integer.parseInt(num) > 0){
-            nodo.sinProblema = true;
-            nodo.posInicial = Integer.parseInt(num);
-            nodo.contador++;
-        }else{
-            nodo.sinProblema = false;
-            nodo.imprimir = "Posicion inicial negativa";
-        }
-    }catch(Exception e){
-        nodo.sinProblema = false;
-        nodo.imprimir = "Posicion inicial tiene id";
-    }
-    RESULT = nodo;:}
-;
+                agregarVariable(id,funcion);
+            }:}
+        ;
+
+TIPO::= numerico {::}
+        | tipoCadena {::}
+        | archivo {::}
+        ;
+
+FUN::=    leerarchivo parentesisA cadena:ruta parentesisC 
+            {:AnalizarDatos analizar = new AnalizarDatos(); ruta.replace("\"",""); ArchivoDatos archivo = analizar.analisis(ruta);
+              if(archivo == null){
+                RESULT = 1;
+              }else{
+                RESULT = archivo;
+              }:}
+        | sumar parentesisA identificador coma cadena parentesisC {::}
+        | contar parentesisA identificador parentesisC {::}
+        | promedio parentesisA identificador coma cadena parentesisC {::}
+        | contarsi parentesisA identificador coma cadena coma OPERADOR:ope coma DATOS:dato parentesisC {::}
+        | obtenersi parentesisA identificador coma cadena coma OPERADOR:ope coma DATOS:dato parentesisC {::}
+        ;
+
+GRA::= graficar parentesisA cadena coma cadena coma identificador coma cadena coma cadena parentesisC puntocoma{::}
+        ;
+
+DATOS::= num:num {:Dato dat = new Dato(0,"",Integer.parseInt(num),0); RESULT = dat;:}
+        | decimal:dec {:Dato dat = new Dato(1,"",0,Double.parseDouble(dec)); RESULT = dat;:}
+        | cadena:cad {:Dato dat = new Dato(2,cad,0,0); RESULT = dat;:}
+        ;
+
+OPERADOR::= menor {: RESULT = "0"; :}
+            | mayor {: RESULT = "1"; :}
+            | menorigual {: RESULT = "2"; :}
+            | mayorigual {: RESULT = "3"; :}
+            | igualigual {: RESULT = "4"; :}
+            | noigual {: RESULT = "5"; :}
+            ;

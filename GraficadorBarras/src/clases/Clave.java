@@ -10,8 +10,8 @@ package clases;
  * @author Junior
  */
 public class Clave {
-    String clave;
-    int tipo;
+    public String clave;
+    public int tipo;
 
     public Clave(String clave) {
         this.clave = clave;

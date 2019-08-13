@@ -12,9 +12,9 @@ package clases;
 public class Token {
     public String id, token, tipo, fila, columna;
 
-    public Token(String id, String token, String tipo, String fila, String columna) {
-        this.id = id;
-        this.token = token;
+    public Token(int num, String tk, String tipo, String fila, String columna) {
+        this.id = Integer.toString(num);
+        this.token = tk;
         this.tipo = tipo;
         this.fila = fila;
         this.columna = columna;

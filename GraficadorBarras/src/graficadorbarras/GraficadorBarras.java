@@ -7,6 +7,7 @@ package graficadorbarras;
 
 import clases.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -17,6 +18,7 @@ public class GraficadorBarras {
     public static ArrayList<Token> erroresLexicos = new ArrayList();
     public static ArrayList<Token> erroresSintacticos = new ArrayList();
     public static ArrayList<String> erroresSemanticos = new ArrayList();
+    public static HashMap<String, Object> variables = new HashMap();
     /**
      * @param args the command line arguments
      */

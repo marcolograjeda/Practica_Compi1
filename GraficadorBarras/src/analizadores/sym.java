@@ -8,25 +8,63 @@ package analizadores;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int coma = 4;
-  public static final int puntocoma = 3;
-  public static final int num = 8;
+  public static final int menorigual = 15;
+  public static final int cadena = 27;
+  public static final int decimal = 26;
+  public static final int coma = 19;
+  public static final int promedio = 8;
+  public static final int archivo = 4;
+  public static final int imprimir = 12;
+  public static final int contarsi = 9;
+  public static final int sumar = 6;
+  public static final int leerarchivo = 5;
+  public static final int num = 25;
+  public static final int numerico = 2;
+  public static final int menor = 13;
+  public static final int mayorigual = 16;
+  public static final int igual = 21;
+  public static final int obtenersi = 10;
   public static final int EOF = 0;
+  public static final int noigual = 18;
+  public static final int puntocoma = 20;
   public static final int error = 1;
-  public static final int parentesisc = 6;
-  public static final int extraer = 2;
-  public static final int parentesisa = 5;
-  public static final int identificador = 7;
+  public static final int contar = 7;
+  public static final int tipoCadena = 3;
+  public static final int parentesisC = 23;
+  public static final int graficar = 11;
+  public static final int parentesisA = 22;
+  public static final int igualigual = 17;
+  public static final int identificador = 24;
+  public static final int mayor = 14;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "extraer",
-  "puntocoma",
+  "numerico",
+  "tipoCadena",
+  "archivo",
+  "leerarchivo",
+  "sumar",
+  "contar",
+  "promedio",
+  "contarsi",
+  "obtenersi",
+  "graficar",
+  "imprimir",
+  "menor",
+  "mayor",
+  "menorigual",
+  "mayorigual",
+  "igualigual",
+  "noigual",
   "coma",
-  "parentesisa",
-  "parentesisc",
+  "puntocoma",
+  "igual",
+  "parentesisA",
+  "parentesisC",
   "identificador",
-  "num"
+  "num",
+  "decimal",
+  "cadena"
   };
 }
 

@@ -12,11 +12,11 @@ parser code
     **/
 
     public void errorSemantico(String tipo){
-        graficadorrbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en "+ tipo +" en la linea "+(s.left));  
+        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en "+ tipo +" en el archivo de datos ");  
     }
     public void syntax_error(Symbol s){
         System.err.println("Error sintacto línea " + (s.left) +" columna "+s.right+ ". No se esperaba " +s.value+"."); 
-            //hojatrabajo1.HojaTrabajo1.erroresSintacticos.add(new Token(0,s.value.toString(), "Sintactico", Integer.toString(s.left), Integer.toString(s.right)));
+            graficadorbarras.GraficadorBarras.erroresSintacticos.add(new Token(0,s.value.toString(), "Sintactico en archivo de datos", Integer.toString(s.left), Integer.toString(s.right)));
         }
     
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
@@ -44,9 +44,34 @@ CLA::= claves igual corcheteA LISTACAD corcheteC REGIS{:System.out.println("Entr
 REGIS ::= registros igual corcheteA LISTAR corcheteC{::}
     ;
 
-LISTAR::= LISTAR llaveA LISTAMIX:regis llaveC {:if(regis.datos.size() == datos.registros.get(0).datos.size()){
-            datos.registros.add(regis);}else{
-                errorSemantico("diferente largo de registro" + regis.left); 
+LISTAR::= LISTAR llaveA LISTAMIX:regis llaveC {:
+            if(regis.datos.size() == datos.registros.get(0).datos.size()){
+                boolean clavesIguales = true;
+                int contador = 0;
+                String datosIncorrectos = "";
+                for(Dato x: regis.datos){
+                    if(x.tipo == 2){
+                        if(datos.registros.get(0).datos.get(contador).tipo != 2){
+                            clavesIguales = false;
+                            datosIncorrectos += x.cadena +" "+x.decimal+" "+ x.num +";" ;
+                            break;
+                        }
+                    }else{
+                        if(datos.registros.get(0).datos.get(contador).tipo == 2){
+                            clavesIguales = false;
+                            datosIncorrectos += x.cadena +" "+x.decimal+" "+ x.num +";" ;
+                            break;
+                        }
+                    }
+                    contador++;
+                }
+                if(clavesIguales){
+                    datos.registros.add(regis);
+                }else{
+                    errorSemantico("tipo de dato incorrecto "); //preguntar para sacar la linea regisleft
+                }
+            }else{
+                errorSemantico("diferente largo de registro "); 
             }:}
       |   llaveA LISTAMIX:regis llaveC {:datos.registros.add(regis);:}
     ;
