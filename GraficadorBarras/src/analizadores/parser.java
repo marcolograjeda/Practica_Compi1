@@ -608,6 +608,12 @@ class CUP$parser$actions {
           case 22: // FUN ::= contarsi parentesisA identificador coma cadena coma OPERADOR coma DATOS parentesisC 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-7)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-7)).value;
+		int claveleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).left;
+		int claveright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).right;
+		String clave = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-5)).value;
 		int opeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
 		int operight = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
 		String ope = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
@@ -615,6 +621,228 @@ class CUP$parser$actions {
 		int datoright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Dato dato = (Dato)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
+                ArchivoDatos contarSi;
+                Object variable = variables.get(id);
+                int contador = 0;
+                int conteo = 0;
+                if(variable != null){
+                    if(variable instanceof ArchivoDatos){
+                        contarSi = (ArchivoDatos)variable;
+                        for(Clave x:contarSi.claves){
+                            if(x.clave.equals(clave)){
+                                break;
+                            }
+                            contador++;
+                        }
+                        if(ope.equals("0")){// ">"
+                            if(dato.tipo == 2){
+                                errorSemantico("el dato a comparar no es del tipo correcto");
+                            }else{
+                                for(Registro x:contarSi.registros){
+                                    if(x.datos.get(contador).tipo == 0){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).num > dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).num > dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else if(x.datos.get(contador).tipo==1){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).decimal > dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).decimal > dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else{
+
+                                    }
+                                } 
+                            }
+                        }else if(ope.equals("1")){//"<"
+                            if(dato.tipo == 2){
+                                errorSemantico("el dato a comparar no es del tipo correcto");
+                            }else{
+                                for(Registro x:contarSi.registros){
+                                    if(x.datos.get(contador).tipo == 0){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).num < dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).num < dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else if(x.datos.get(contador).tipo==1){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).decimal < dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).decimal < dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else{
+
+                                    }
+                                } 
+                            }
+                        }else if(ope.equals("2")){//">="
+                            if(dato.tipo == 2){
+                                errorSemantico("el dato a comparar no es del tipo correcto");
+                            }else{
+                                for(Registro x:contarSi.registros){
+                                    if(x.datos.get(contador).tipo == 0){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).num >= dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).num >= dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else if(x.datos.get(contador).tipo==1){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).decimal >= dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).decimal >= dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else{
+
+                                    }
+                                } 
+                            }
+                        }else if(ope.equals("3")){//"<="
+                            if(dato.tipo == 2){
+                                errorSemantico("el dato a comparar no es del tipo correcto");
+                            }else{
+                                for(Registro x:contarSi.registros){
+                                    if(x.datos.get(contador).tipo == 0){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).num <= dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).num <= dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else if(x.datos.get(contador).tipo==1){
+                                        if(dato.tipo == 0){
+                                            if(x.datos.get(contador).decimal <= dato.num){
+                                                conteo++;
+                                            }
+                                        }else if(dato.tipo == 1){
+                                            if(x.datos.get(contador).decimal <= dato.decimal){
+                                                conteo++;
+                                            }
+                                        }
+                                    }else{
+
+                                    }
+                                } 
+                            }
+                        }else if(ope.equals("4")){//"=="
+                            for(Registro x:contarSi.registros){
+                                if(x.datos.get(contador).tipo == 0){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).num == dato.num){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).num == dato.decimal){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 2){
+                                        errorSemantico("comparacion entre cadena y numero");
+                                    }
+                                }else if(x.datos.get(contador).tipo==1){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).decimal == dato.num){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).decimal == dato.decimal){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 2){
+                                        errorSemantico("comparacion entre cadena y decimal");
+                                    }
+                                }else{
+                                    if(dato.tipo == 0){
+                                        errorSemantico("comparacion entre cadena y numero");
+                                    }else if(dato.tipo == 1){
+                                        errorSemantico("comparacion entre cadena y decimal");
+                                    }else if(dato.tipo == 2){
+                                        if(x.datos.get(contador).cadena.equals(dato.cadena)){
+                                            conteo++;
+                                        }
+                                    }
+                                }
+                            }
+                        }else if(ope.equals("5")){//!=
+                            for(Registro x:contarSi.registros){
+                                if(x.datos.get(contador).tipo == 0){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).num != dato.num){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).num != dato.decimal){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 2){
+                                        errorSemantico("comparacion entre cadena y numero");
+                                    }
+                                }else if(x.datos.get(contador).tipo==1){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).decimal != dato.num){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).decimal != dato.decimal){
+                                            conteo++;
+                                        }
+                                    }else if(dato.tipo == 2){
+                                        errorSemantico("comparacion entre cadena y decimal");
+                                    }
+                                }else{
+                                    if(dato.tipo == 0){
+                                        errorSemantico("comparacion entre cadena y numero");
+                                    }else if(dato.tipo == 1){
+                                        errorSemantico("comparacion entre cadena y decimal");
+                                    }else if(dato.tipo == 2){
+                                        if(!x.datos.get(contador).cadena.equals(dato.cadena)){
+                                            conteo++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        RESULT = conteo;
+                    }else{
+                        System.out.println("la variable "+id+" no es de tipo archivo");
+                        errorSemantico("la variable "+id+" no es de tipo archivo");
+                        RESULT = -1;
+                    }
+                }else{
+                    System.out.println("la variable "+id+" no existe");
+                    errorSemantico("la variable "+id+"no existe");
+                    RESULT = -1;
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("FUN",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-9)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
