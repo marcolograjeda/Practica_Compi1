@@ -2,6 +2,7 @@ package analizadores;
 import java_cup.runtime.*;
 import graficadorbarras.*;
 import clases.*;
+import java.util.HashMap;
 
 parser code
 {:
@@ -9,11 +10,12 @@ parser code
     /**
     * Metodo para error sintactico
     **/
+    HashMap variables = graficadorbarras.GraficadorBarras.variables;
     public void agregarVariable(String id, Object objeto){
         graficadorbarras.GraficadorBarras.variables.put(id,objeto);
     }
     public void errorSemantico(String tipo){
-        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en "+ tipo +" en el archivo de datos ");  
+        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en el archivo de reportes " + tipo);  
     }
     public void syntax_error(Symbol s){
         System.err.println("Error sintacto línea " + (s.left) +" columna "+s.right+ ". No se esperaba " +s.value+"."); 
@@ -44,16 +46,45 @@ REP::=  REP VAR {::}
         | IMP {::}
         ;
 
-IMP::=  imprimir parentesisA EXP parentesisC puntocoma {::}
+IMP::=  imprimir parentesisA EXP:expresion parentesisC puntocoma {:System.out.println(expresion);:}
         ;
 
-EXP::=  EXP coma EXPDA {::}
-        | EXPDA {::}
+EXP::=  EXP:txt coma EXPDA:texto {:if(!texto.equals("M@1")){
+            RESULT = txt + texto;
+        }else{
+            RESULT = txt;
+        }:}
+        | EXPDA:texto {:if(!texto.equals("M@1")){
+            RESULT = texto;
+        }else{
+            RESULT = "";
+        }:}
         ;
 
-EXPDA::= identificador {::}
-        | cadena {::}
-        | num {::}
+EXPDA::= identificador:id {:
+            Object variable = variables.get(id);
+            int contador = 0;
+            if(variable != null){
+                String result = "";
+                if(variable instanceof ArchivoDatos){
+                    
+                    
+                }else{
+                    result += variable;
+                    /*System.out.println("el tipo de la variable "+id);
+                    errorSemantico("el tipo de la variable "+id);
+                    RESULT = "M@1";*/
+                }
+                RESULT = result;
+            }else{
+                System.out.println("la variable "+id+" no existe");
+                errorSemantico("la variable "+id+" no existe");
+                RESULT = "M@1";
+            }
+        :}
+        | cadena:cadena {:RESULT = cadena.replace("\"", "");:}
+        | num:num {:String result = "" + num; RESULT = result;:}
+        | decimal:decimal {:String result = "" + decimal; RESULT = result;:}
         ;
 
 VAR::=  TIPO identificador:id igual FUN:funcion puntocoma {:
@@ -78,9 +109,93 @@ FUN::=    leerarchivo parentesisA cadena:ruta parentesisC
               }else{
                 RESULT = archivo;
               }:}
-        | sumar parentesisA identificador coma cadena parentesisC {::}
-        | contar parentesisA identificador parentesisC {::}
-        | promedio parentesisA identificador coma cadena parentesisC {::}
+        | sumar parentesisA identificador:id coma cadena:clave parentesisC {:
+                ArchivoDatos sumar;
+                Object variable = variables.get(id);
+                int contador = 0;
+                if(variable != null){
+                    if(variable instanceof ArchivoDatos){
+                        sumar = (ArchivoDatos)variable;
+                        for(Clave x:sumar.claves){
+                            if(x.clave.equals(clave)){
+                                break;
+                            }
+                            contador++;
+                        }
+                        double suma = 0;
+                        for(Registro x:sumar.registros){
+                            if(x.datos.get(contador).tipo == 0){
+                                suma += x.datos.get(contador).num;
+                            }else if(x.datos.get(contador).tipo==1){
+                                suma += x.datos.get(contador).decimal;
+                            }else{
+                                
+                            }
+                        }
+                        RESULT = suma;
+                    }else{
+                        System.out.println("la variable "+id+" no es de tipo archivo");
+                        errorSemantico("la variable "+id+" no es de tipo archivo");
+                        RESULT = -1;
+                    }
+                }else{
+                    System.out.println("la variable "+id+" no existe");
+                    errorSemantico("la variable "+id+"no existe");
+                    RESULT = -1;
+                }
+            :}
+        | contar parentesisA identificador:id parentesisC {:ArchivoDatos sumar;
+                Object variable = variables.get(id);
+                if(variable != null){
+                    if(variable instanceof ArchivoDatos){
+                        sumar = (ArchivoDatos)variable;
+                        RESULT = sumar.registros.size();
+                    }else{
+                        System.out.println("la variable "+id+" no es de tipo archivo");
+                        errorSemantico("la variable "+id+" no es de tipo archivo");
+                        RESULT = -1;
+                    }
+                }else{
+                    System.out.println("la variable "+id+" no existe");
+                    errorSemantico("la variable "+id+"no existe");
+                    RESULT = -1;
+                }
+                :}
+        | promedio parentesisA identificador:id coma cadena:clave parentesisC {:
+                ArchivoDatos sumar;
+                Object variable = variables.get(id);
+                int contador = 0;
+                if(variable != null){
+                    if(variable instanceof ArchivoDatos){
+                        sumar = (ArchivoDatos)variable;
+                        for(Clave x:sumar.claves){
+                            if(x.clave.equals(clave)){
+                                break;
+                            }
+                            contador++;
+                        }
+                        double suma = 0;
+                        for(Registro x:sumar.registros){
+                            if(x.datos.get(contador).tipo == 0){
+                                suma += x.datos.get(contador).num;
+                            }else if(x.datos.get(contador).tipo==1){
+                                suma += x.datos.get(contador).decimal;
+                            }else{
+                                
+                            }
+                        }
+                        RESULT = suma/sumar.registros.size();
+                    }else{
+                        System.out.println("la variable "+id+" no es de tipo archivo");
+                        errorSemantico("la variable "+id+" no es de tipo archivo");
+                        RESULT = -1;
+                    }
+                }else{
+                    System.out.println("la variable "+id+" no existe");
+                    errorSemantico("la variable "+id+"no existe");
+                    RESULT = -1;
+                }
+            :}
         | contarsi parentesisA identificador coma cadena coma OPERADOR:ope coma DATOS:dato parentesisC {::}
         | obtenersi parentesisA identificador coma cadena coma OPERADOR:ope coma DATOS:dato parentesisC {::}
         ;

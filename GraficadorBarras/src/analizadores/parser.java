@@ -8,6 +8,7 @@ package analizadores;
 import java_cup.runtime.*;
 import graficadorbarras.*;
 import clases.*;
+import java.util.HashMap;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -33,17 +34,17 @@ public class parser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\041\000\002\002\004\000\002\002\004\000\002\002" +
+    "\000\042\000\002\002\004\000\002\002\004\000\002\002" +
     "\004\000\002\002\004\000\002\002\003\000\002\002\003" +
     "\000\002\002\003\000\002\004\007\000\002\005\005\000" +
     "\002\005\003\000\002\006\003\000\002\006\003\000\002" +
-    "\006\003\000\002\003\007\000\002\007\003\000\002\007" +
-    "\003\000\002\007\003\000\002\012\006\000\002\012\010" +
-    "\000\002\012\006\000\002\012\010\000\002\012\014\000" +
-    "\002\012\014\000\002\011\017\000\002\013\003\000\002" +
-    "\013\003\000\002\013\003\000\002\010\003\000\002\010" +
+    "\006\003\000\002\006\003\000\002\003\007\000\002\007" +
+    "\003\000\002\007\003\000\002\007\003\000\002\012\006" +
+    "\000\002\012\010\000\002\012\006\000\002\012\010\000" +
+    "\002\012\014\000\002\012\014\000\002\011\017\000\002" +
+    "\013\003\000\002\013\003\000\002\013\003\000\002\010" +
     "\003\000\002\010\003\000\002\010\003\000\002\010\003" +
-    "\000\002\010\003" });
+    "\000\002\010\003\000\002\010\003" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -51,61 +52,62 @@ public class parser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\132\000\014\004\005\005\012\006\015\015\014\016" +
+    "\000\133\000\014\004\005\005\012\006\014\015\015\016" +
     "\007\001\002\000\016\002\ufffd\004\ufffd\005\ufffd\006\ufffd" +
-    "\015\ufffd\016\ufffd\001\002\000\004\032\ufff3\001\002\000" +
-    "\016\002\132\004\005\005\012\006\015\015\014\016\007" +
+    "\015\ufffd\016\ufffd\001\002\000\004\032\ufff2\001\002\000" +
+    "\016\002\133\004\005\005\012\006\014\015\015\016\007" +
     "\001\002\000\004\030\117\001\002\000\016\002\ufffc\004" +
     "\ufffc\005\ufffc\006\ufffc\015\ufffc\016\ufffc\001\002\000\016" +
     "\002\ufffb\004\ufffb\005\ufffb\006\ufffb\015\ufffb\016\ufffb\001" +
-    "\002\000\004\032\ufff2\001\002\000\004\032\032\001\002" +
-    "\000\004\030\016\001\002\000\004\032\ufff1\001\002\000" +
+    "\002\000\004\032\ufff1\001\002\000\004\032\032\001\002" +
+    "\000\004\032\ufff0\001\002\000\004\030\016\001\002\000" +
     "\004\035\017\001\002\000\004\025\020\001\002\000\004" +
     "\035\021\001\002\000\004\025\022\001\002\000\004\032" +
     "\023\001\002\000\004\025\024\001\002\000\004\035\025" +
     "\001\002\000\004\025\026\001\002\000\004\035\027\001" +
     "\002\000\004\031\030\001\002\000\004\026\031\001\002" +
-    "\000\016\002\uffea\004\uffea\005\uffea\006\uffea\015\uffea\016" +
-    "\uffea\001\002\000\004\027\033\001\002\000\016\007\036" +
+    "\000\016\002\uffe9\004\uffe9\005\uffe9\006\uffe9\015\uffe9\016" +
+    "\uffe9\001\002\000\004\027\033\001\002\000\016\007\036" +
     "\010\035\011\037\012\034\013\042\014\041\001\002\000" +
     "\004\030\112\001\002\000\004\030\105\001\002\000\004" +
     "\030\102\001\002\000\004\030\077\001\002\000\004\026" +
     "\076\001\002\000\004\030\065\001\002\000\004\030\043" +
     "\001\002\000\004\032\044\001\002\000\004\025\045\001" +
     "\002\000\004\035\046\001\002\000\004\025\047\001\002" +
-    "\000\016\017\052\020\053\021\054\022\055\023\050\024" +
-    "\051\001\002\000\004\025\uffe2\001\002\000\004\025\uffe1" +
-    "\001\002\000\004\025\uffe6\001\002\000\004\025\uffe5\001" +
+    "\000\016\017\052\020\054\021\055\022\053\023\050\024" +
+    "\051\001\002\000\004\025\uffe1\001\002\000\004\025\uffe0" +
+    "\001\002\000\004\025\uffe5\001\002\000\004\025\uffe2\001" +
     "\002\000\004\025\uffe4\001\002\000\004\025\uffe3\001\002" +
     "\000\004\025\057\001\002\000\010\033\062\034\060\035" +
-    "\061\001\002\000\004\031\uffe8\001\002\000\004\031\uffe7" +
-    "\001\002\000\004\031\uffe9\001\002\000\004\031\064\001" +
-    "\002\000\004\026\uffec\001\002\000\004\032\066\001\002" +
+    "\061\001\002\000\004\031\uffe7\001\002\000\004\031\uffe6" +
+    "\001\002\000\004\031\uffe8\001\002\000\004\031\064\001" +
+    "\002\000\004\026\uffeb\001\002\000\004\032\066\001\002" +
     "\000\004\025\067\001\002\000\004\035\070\001\002\000" +
-    "\004\025\071\001\002\000\016\017\052\020\053\021\054" +
-    "\022\055\023\050\024\051\001\002\000\004\025\073\001" +
+    "\004\025\071\001\002\000\016\017\052\020\054\021\055" +
+    "\022\053\023\050\024\051\001\002\000\004\025\073\001" +
     "\002\000\010\033\062\034\060\035\061\001\002\000\004" +
-    "\031\075\001\002\000\004\026\uffeb\001\002\000\016\002" +
-    "\ufff4\004\ufff4\005\ufff4\006\ufff4\015\ufff4\016\ufff4\001\002" +
+    "\031\075\001\002\000\004\026\uffea\001\002\000\016\002" +
+    "\ufff3\004\ufff3\005\ufff3\006\ufff3\015\ufff3\016\ufff3\001\002" +
     "\000\004\032\100\001\002\000\004\031\101\001\002\000" +
-    "\004\026\uffee\001\002\000\004\035\103\001\002\000\004" +
-    "\031\104\001\002\000\004\026\ufff0\001\002\000\004\032" +
+    "\004\026\uffed\001\002\000\004\035\103\001\002\000\004" +
+    "\031\104\001\002\000\004\026\uffef\001\002\000\004\032" +
     "\106\001\002\000\004\025\107\001\002\000\004\035\110" +
-    "\001\002\000\004\031\111\001\002\000\004\026\uffef\001" +
+    "\001\002\000\004\031\111\001\002\000\004\026\uffee\001" +
     "\002\000\004\032\113\001\002\000\004\025\114\001\002" +
     "\000\004\035\115\001\002\000\004\031\116\001\002\000" +
-    "\004\026\uffed\001\002\000\010\032\122\033\121\035\120" +
-    "\001\002\000\006\025\ufff6\031\ufff6\001\002\000\006\025" +
-    "\ufff5\031\ufff5\001\002\000\006\025\ufff7\031\ufff7\001\002" +
-    "\000\006\025\125\031\126\001\002\000\006\025\ufff8\031" +
-    "\ufff8\001\002\000\010\032\122\033\121\035\120\001\002" +
-    "\000\004\026\127\001\002\000\016\002\ufffa\004\ufffa\005" +
-    "\ufffa\006\ufffa\015\ufffa\016\ufffa\001\002\000\006\025\ufff9" +
-    "\031\ufff9\001\002\000\016\002\ufffe\004\ufffe\005\ufffe\006" +
-    "\ufffe\015\ufffe\016\ufffe\001\002\000\004\002\001\001\002" +
-    "\000\016\002\000\004\000\005\000\006\000\015\000\016" +
-    "\000\001\002\000\016\002\uffff\004\uffff\005\uffff\006\uffff" +
-    "\015\uffff\016\uffff\001\002" });
+    "\004\026\uffec\001\002\000\012\032\123\033\122\034\120" +
+    "\035\121\001\002\000\006\025\ufff4\031\ufff4\001\002\000" +
+    "\006\025\ufff6\031\ufff6\001\002\000\006\025\ufff5\031\ufff5" +
+    "\001\002\000\006\025\ufff7\031\ufff7\001\002\000\006\025" +
+    "\126\031\127\001\002\000\006\025\ufff8\031\ufff8\001\002" +
+    "\000\012\032\123\033\122\034\120\035\121\001\002\000" +
+    "\004\026\130\001\002\000\016\002\ufffa\004\ufffa\005\ufffa" +
+    "\006\ufffa\015\ufffa\016\ufffa\001\002\000\006\025\ufff9\031" +
+    "\ufff9\001\002\000\016\002\ufffe\004\ufffe\005\ufffe\006\ufffe" +
+    "\015\ufffe\016\ufffe\001\002\000\004\002\001\001\002\000" +
+    "\016\002\000\004\000\005\000\006\000\015\000\016\000" +
+    "\001\002\000\016\002\uffff\004\uffff\005\uffff\006\uffff\015" +
+    "\uffff\016\uffff\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -113,9 +115,9 @@ public class parser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\132\000\014\002\005\003\007\004\010\007\012\011" +
+    "\000\133\000\014\002\005\003\007\004\010\007\012\011" +
     "\003\001\001\000\002\001\001\000\002\001\001\000\012" +
-    "\003\132\004\133\007\012\011\130\001\001\000\002\001" +
+    "\003\133\004\134\007\012\011\131\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
@@ -138,12 +140,12 @@ public class parser extends java_cup.runtime.lr_parser {
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\006\005\122" +
-    "\006\123\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\004" +
-    "\006\127\001\001\000\002\001\001\000\002\001\001\000" +
+    "\001\000\002\001\001\000\002\001\001\000\006\005\123" +
+    "\006\124\001\001\000\002\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
-    "\001\001\000\002\001\001" });
+    "\001\001\000\004\006\130\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -186,11 +188,12 @@ public class parser extends java_cup.runtime.lr_parser {
     /**
     * Metodo para error sintactico
     **/
+    HashMap variables = graficadorbarras.GraficadorBarras.variables;
     public void agregarVariable(String id, Object objeto){
         graficadorbarras.GraficadorBarras.variables.put(id,objeto);
     }
     public void errorSemantico(String tipo){
-        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en "+ tipo +" en el archivo de datos ");  
+        graficadorbarras.GraficadorBarras.erroresSemanticos.add("Error semantico en el archivo de reportes " + tipo);  
     }
     public void syntax_error(Symbol s){
         System.err.println("Error sintacto línea " + (s.left) +" columna "+s.right+ ". No se esperaba " +s.value+"."); 
@@ -298,7 +301,10 @@ class CUP$parser$actions {
           case 7: // IMP ::= imprimir parentesisA EXP parentesisC puntocoma 
             {
               String RESULT =null;
-		
+		int expresionleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int expresionright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		String expresion = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		System.out.println(expresion);
               CUP$parser$result = parser.getSymbolFactory().newSymbol("IMP",2, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-4)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -307,7 +313,17 @@ class CUP$parser$actions {
           case 8: // EXP ::= EXP coma EXPDA 
             {
               String RESULT =null;
-		
+		int txtleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int txtright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		String txt = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int textoleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int textoright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String texto = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		if(!texto.equals("M@1")){
+            RESULT = txt + texto;
+        }else{
+            RESULT = txt;
+        }
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXP",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -316,7 +332,14 @@ class CUP$parser$actions {
           case 9: // EXP ::= EXPDA 
             {
               String RESULT =null;
-		
+		int textoleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int textoright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String texto = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		if(!texto.equals("M@1")){
+            RESULT = texto;
+        }else{
+            RESULT = "";
+        }
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXP",3, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -325,7 +348,30 @@ class CUP$parser$actions {
           case 10: // EXPDA ::= identificador 
             {
               String RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
+            Object variable = variables.get(id);
+            int contador = 0;
+            if(variable != null){
+                String result = "";
+                if(variable instanceof ArchivoDatos){
+                    
+                    
+                }else{
+                    result += variable;
+                    /*System.out.println("el tipo de la variable "+id);
+                    errorSemantico("el tipo de la variable "+id);
+                    RESULT = "M@1";*/
+                }
+                RESULT = result;
+            }else{
+                System.out.println("la variable "+id+" no existe");
+                errorSemantico("la variable "+id+" no existe");
+                RESULT = "M@1";
+            }
+        
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPDA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -334,7 +380,10 @@ class CUP$parser$actions {
           case 11: // EXPDA ::= cadena 
             {
               String RESULT =null;
-		
+		int cadenaleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int cadenaright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String cadena = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		RESULT = cadena.replace("\"", "");
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPDA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -343,13 +392,28 @@ class CUP$parser$actions {
           case 12: // EXPDA ::= num 
             {
               String RESULT =null;
-		
+		int numleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int numright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String num = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		String result = "" + num; RESULT = result;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPDA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // VAR ::= TIPO identificador igual FUN puntocoma 
+          case 13: // EXPDA ::= decimal 
+            {
+              String RESULT =null;
+		int decimalleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int decimalright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		String decimal = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		String result = "" + decimal; RESULT = result;
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("EXPDA",4, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+            }
+          return CUP$parser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 14: // VAR ::= TIPO identificador igual FUN puntocoma 
             {
               String RESULT =null;
 		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -371,7 +435,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 14: // TIPO ::= numerico 
+          case 15: // TIPO ::= numerico 
             {
               String RESULT =null;
 		
@@ -380,7 +444,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 15: // TIPO ::= tipoCadena 
+          case 16: // TIPO ::= tipoCadena 
             {
               String RESULT =null;
 		
@@ -389,7 +453,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 16: // TIPO ::= archivo 
+          case 17: // TIPO ::= archivo 
             {
               String RESULT =null;
 		
@@ -398,7 +462,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 17: // FUN ::= leerarchivo parentesisA cadena parentesisC 
+          case 18: // FUN ::= leerarchivo parentesisA cadena parentesisC 
             {
               Object RESULT =null;
 		int rutaleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
@@ -415,34 +479,133 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 18: // FUN ::= sumar parentesisA identificador coma cadena parentesisC 
+          case 19: // FUN ::= sumar parentesisA identificador coma cadena parentesisC 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int claveleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int claveright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String clave = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
+                ArchivoDatos sumar;
+                Object variable = variables.get(id);
+                int contador = 0;
+                if(variable != null){
+                    if(variable instanceof ArchivoDatos){
+                        sumar = (ArchivoDatos)variable;
+                        for(Clave x:sumar.claves){
+                            if(x.clave.equals(clave)){
+                                break;
+                            }
+                            contador++;
+                        }
+                        double suma = 0;
+                        for(Registro x:sumar.registros){
+                            if(x.datos.get(contador).tipo == 0){
+                                suma += x.datos.get(contador).num;
+                            }else if(x.datos.get(contador).tipo==1){
+                                suma += x.datos.get(contador).decimal;
+                            }else{
+                                
+                            }
+                        }
+                        RESULT = suma;
+                    }else{
+                        System.out.println("la variable "+id+" no es de tipo archivo");
+                        errorSemantico("la variable "+id+" no es de tipo archivo");
+                        RESULT = -1;
+                    }
+                }else{
+                    System.out.println("la variable "+id+" no existe");
+                    errorSemantico("la variable "+id+"no existe");
+                    RESULT = -1;
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("FUN",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 19: // FUN ::= contar parentesisA identificador parentesisC 
+          case 20: // FUN ::= contar parentesisA identificador parentesisC 
             {
               Object RESULT =null;
-		
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		ArchivoDatos sumar;
+                Object variable = variables.get(id);
+                if(variable != null){
+                    if(variable instanceof ArchivoDatos){
+                        sumar = (ArchivoDatos)variable;
+                        RESULT = sumar.registros.size();
+                    }else{
+                        System.out.println("la variable "+id+" no es de tipo archivo");
+                        errorSemantico("la variable "+id+" no es de tipo archivo");
+                        RESULT = -1;
+                    }
+                }else{
+                    System.out.println("la variable "+id+" no existe");
+                    errorSemantico("la variable "+id+"no existe");
+                    RESULT = -1;
+                }
+                
               CUP$parser$result = parser.getSymbolFactory().newSymbol("FUN",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 20: // FUN ::= promedio parentesisA identificador coma cadena parentesisC 
+          case 21: // FUN ::= promedio parentesisA identificador coma cadena parentesisC 
             {
               Object RESULT =null;
+		int idleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).right;
+		String id = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-3)).value;
+		int claveleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int claveright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String clave = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
 		
+                ArchivoDatos sumar;
+                Object variable = variables.get(id);
+                int contador = 0;
+                if(variable != null){
+                    if(variable instanceof ArchivoDatos){
+                        sumar = (ArchivoDatos)variable;
+                        for(Clave x:sumar.claves){
+                            if(x.clave.equals(clave)){
+                                break;
+                            }
+                            contador++;
+                        }
+                        double suma = 0;
+                        for(Registro x:sumar.registros){
+                            if(x.datos.get(contador).tipo == 0){
+                                suma += x.datos.get(contador).num;
+                            }else if(x.datos.get(contador).tipo==1){
+                                suma += x.datos.get(contador).decimal;
+                            }else{
+                                
+                            }
+                        }
+                        RESULT = suma/sumar.registros.size();
+                    }else{
+                        System.out.println("la variable "+id+" no es de tipo archivo");
+                        errorSemantico("la variable "+id+" no es de tipo archivo");
+                        RESULT = -1;
+                    }
+                }else{
+                    System.out.println("la variable "+id+" no existe");
+                    errorSemantico("la variable "+id+"no existe");
+                    RESULT = -1;
+                }
+            
               CUP$parser$result = parser.getSymbolFactory().newSymbol("FUN",8, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-5)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 21: // FUN ::= contarsi parentesisA identificador coma cadena coma OPERADOR coma DATOS parentesisC 
+          case 22: // FUN ::= contarsi parentesisA identificador coma cadena coma OPERADOR coma DATOS parentesisC 
             {
               Object RESULT =null;
 		int opeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -457,7 +620,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 22: // FUN ::= obtenersi parentesisA identificador coma cadena coma OPERADOR coma DATOS parentesisC 
+          case 23: // FUN ::= obtenersi parentesisA identificador coma cadena coma OPERADOR coma DATOS parentesisC 
             {
               Object RESULT =null;
 		int opeleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).left;
@@ -472,7 +635,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 23: // GRA ::= graficar parentesisA cadena coma cadena coma identificador coma cadena coma cadena parentesisC puntocoma 
+          case 24: // GRA ::= graficar parentesisA cadena coma cadena coma identificador coma cadena coma cadena parentesisC puntocoma 
             {
               String RESULT =null;
 		
@@ -481,7 +644,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 24: // DATOS ::= num 
+          case 25: // DATOS ::= num 
             {
               Dato RESULT =null;
 		int numleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
@@ -493,7 +656,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 25: // DATOS ::= decimal 
+          case 26: // DATOS ::= decimal 
             {
               Dato RESULT =null;
 		int decleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
@@ -505,7 +668,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 26: // DATOS ::= cadena 
+          case 27: // DATOS ::= cadena 
             {
               Dato RESULT =null;
 		int cadleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
@@ -517,7 +680,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 27: // OPERADOR ::= menor 
+          case 28: // OPERADOR ::= menor 
             {
               String RESULT =null;
 		 RESULT = "0"; 
@@ -526,7 +689,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 28: // OPERADOR ::= mayor 
+          case 29: // OPERADOR ::= mayor 
             {
               String RESULT =null;
 		 RESULT = "1"; 
@@ -535,7 +698,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 29: // OPERADOR ::= menorigual 
+          case 30: // OPERADOR ::= menorigual 
             {
               String RESULT =null;
 		 RESULT = "2"; 
@@ -544,7 +707,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 30: // OPERADOR ::= mayorigual 
+          case 31: // OPERADOR ::= mayorigual 
             {
               String RESULT =null;
 		 RESULT = "3"; 
@@ -553,7 +716,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 31: // OPERADOR ::= igualigual 
+          case 32: // OPERADOR ::= igualigual 
             {
               String RESULT =null;
 		 RESULT = "4"; 
@@ -562,7 +725,7 @@ class CUP$parser$actions {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 32: // OPERADOR ::= noigual 
+          case 33: // OPERADOR ::= noigual 
             {
               String RESULT =null;
 		 RESULT = "5"; 
