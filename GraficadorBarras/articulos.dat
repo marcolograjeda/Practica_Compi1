@@ -22,7 +22,7 @@ registros =
 
 [
 
-{ 1, "Té Dharamsala", "Exotic Liquids", "Bebidas", "10 cajas x 20 bolsas", 18,39, "FALSO" }
+{ 1, "Té Dharamsala", "Exotic Liquids", "Bebidas", "10 cajas x 20 bolsas", 18,39 }
 
 { 2, "Cerveza tibetana Barley", "Exotic Liquids", "Bebidas", "24 - bot. 12 l", 19,17, "FALSO" }
 

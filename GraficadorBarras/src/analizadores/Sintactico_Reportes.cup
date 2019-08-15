@@ -10,6 +10,9 @@ parser code
     /**
     * Metodo para error sintactico
     **/
+    public void agregarTextoConsola(String texto){
+        graficadorbarras.GraficadorBarras.textoConsola += texto;
+    }
     HashMap variables = graficadorbarras.GraficadorBarras.variables;
     public void agregarVariable(String id, Object objeto){
         graficadorbarras.GraficadorBarras.variables.put(id,objeto);
@@ -46,7 +49,7 @@ REP::=  REP VAR {::}
         | IMP {::}
         ;
 
-IMP::=  imprimir parentesisA EXP:expresion parentesisC puntocoma {:System.out.println(expresion);:}
+IMP::=  imprimir parentesisA EXP:expresion parentesisC puntocoma {:agregarTextoConsola(expresion+"\n");:}
         ;
 
 EXP::=  EXP:txt coma EXPDA:texto {:if(!texto.equals("M@1")){
@@ -67,8 +70,12 @@ EXPDA::= identificador:id {:
             if(variable != null){
                 String result = "";
                 if(variable instanceof ArchivoDatos){
-                    
-                    
+                    result = "Claves = [";
+                    ArchivoDatos archivo = (ArchivoDatos)variable;
+                    for(Clave clave : archivo.claves){
+                        result += clave.clave +", ";
+                    }
+                    result += "]\n" + "Numero de registros = "+archivo.registros.size();
                 }else{
                     result += variable;
                     /*System.out.println("el tipo de la variable "+id);
@@ -414,15 +421,886 @@ FUN::=    leerarchivo parentesisA cadena:ruta parentesisC
                         RESULT = -1;
                     }
                 }else{
-                    System.out.println("la variable "+id+" no existe");
-                    errorSemantico("la variable "+id+"no existe");
+                    System.out.println("la variable "+ id +" no existe");
+                    errorSemantico("la variable "+ id +" no existe");
                     RESULT = -1;
                 }
             :}
-        | obtenersi parentesisA identificador coma cadena coma OPERADOR:ope coma DATOS:dato parentesisC {::}
+        | obtenersi parentesisA identificador:id coma cadena:clave coma OPERADOR:ope coma DATOS:dato parentesisC {:
+            ArchivoDatos contarSi;
+            Object variable = variables.get(id);
+            int contador = 0;
+            int conteo = 0;
+            String texto = "[\n";
+            if(variable != null){
+                if(variable instanceof ArchivoDatos){
+                    contarSi = (ArchivoDatos)variable;
+                    for(Clave x:contarSi.claves){
+                        if(x.clave.equals(clave)){
+                            break;
+                        }
+                        contador++;
+                    }
+                    if(ope.equals("0")){// ">"
+                        if(dato.tipo == 2){
+                            errorSemantico("el dato a comparar no es del tipo correcto");
+                        }else{
+                            for(Registro x:contarSi.registros){
+                                if(x.datos.get(contador).tipo == 0){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).num > dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n"; 
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).num > dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else if(x.datos.get(contador).tipo==1){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).decimal > dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).decimal > dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else{
+
+                                }
+                            } 
+                        }
+                    }else if(ope.equals("1")){//"<"
+                        if(dato.tipo == 2){
+                            errorSemantico("el dato a comparar no es del tipo correcto");
+                        }else{
+                            for(Registro x:contarSi.registros){
+                                if(x.datos.get(contador).tipo == 0){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).num < dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).num < dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else if(x.datos.get(contador).tipo==1){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).decimal < dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).decimal < dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else{
+
+                                }
+                            } 
+                        }
+                    }else if(ope.equals("2")){//">="
+                        if(dato.tipo == 2){
+                            errorSemantico("el dato a comparar no es del tipo correcto");
+                        }else{
+                            for(Registro x:contarSi.registros){
+                                if(x.datos.get(contador).tipo == 0){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).num >= dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).num >= dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else if(x.datos.get(contador).tipo==1){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).decimal >= dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).decimal >= dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else{
+
+                                }
+                            } 
+                        }
+                    }else if(ope.equals("3")){//"<="
+                        if(dato.tipo == 2){
+                            errorSemantico("el dato a comparar no es del tipo correcto");
+                        }else{
+                            for(Registro x:contarSi.registros){
+                                if(x.datos.get(contador).tipo == 0){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).num <= dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).num <= dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else if(x.datos.get(contador).tipo==1){
+                                    if(dato.tipo == 0){
+                                        if(x.datos.get(contador).decimal <= dato.num){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }else if(dato.tipo == 1){
+                                        if(x.datos.get(contador).decimal <= dato.decimal){
+                                            texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                        }
+                                    }
+                                }else{
+
+                                }
+                            } 
+                        }
+                    }else if(ope.equals("4")){//"=="
+                        for(Registro x:contarSi.registros){
+                            if(x.datos.get(contador).tipo == 0){
+                                if(dato.tipo == 0){
+                                    if(x.datos.get(contador).num == dato.num){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 1){
+                                    if(x.datos.get(contador).num == dato.decimal){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 2){
+                                    errorSemantico("comparacion entre cadena y numero");
+                                }
+                            }else if(x.datos.get(contador).tipo==1){
+                                if(dato.tipo == 0){
+                                    if(x.datos.get(contador).decimal == dato.num){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 1){
+                                    if(x.datos.get(contador).decimal == dato.decimal){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 2){
+                                    errorSemantico("comparacion entre cadena y decimal");
+                                }
+                            }else{
+                                if(dato.tipo == 0){
+                                    errorSemantico("comparacion entre cadena y numero");
+                                }else if(dato.tipo == 1){
+                                    errorSemantico("comparacion entre cadena y decimal");
+                                }else if(dato.tipo == 2){
+                                    if(x.datos.get(contador).cadena.equals(dato.cadena)){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }
+                            }
+                        }
+                    }else if(ope.equals("5")){//!=
+                        for(Registro x:contarSi.registros){
+                            if(x.datos.get(contador).tipo == 0){
+                                if(dato.tipo == 0){
+                                    if(x.datos.get(contador).num != dato.num){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 1){
+                                    if(x.datos.get(contador).num != dato.decimal){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 2){
+                                    errorSemantico("comparacion entre cadena y numero");
+                                }
+                            }else if(x.datos.get(contador).tipo==1){
+                                if(dato.tipo == 0){
+                                    if(x.datos.get(contador).decimal != dato.num){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 1){
+                                    if(x.datos.get(contador).decimal != dato.decimal){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }else if(dato.tipo == 2){
+                                    errorSemantico("comparacion entre cadena y decimal");
+                                }
+                            }else{
+                                if(dato.tipo == 0){
+                                    errorSemantico("comparacion entre cadena y numero");
+                                }else if(dato.tipo == 1){
+                                    errorSemantico("comparacion entre cadena y decimal");
+                                }else if(dato.tipo == 2){
+                                    if(!x.datos.get(contador).cadena.equals(dato.cadena)){
+                                        texto += "{";
+                                            int soloContar = 0;
+                                            for(Dato dat:x.datos){
+                                                if(dat.tipo == 0){
+                                                    if(soloContar == 0){
+                                                        texto += dat.num;
+                                                    }else{
+                                                        texto += ","+ dat.num;
+                                                    }
+                                                }else if(dat.tipo == 1){
+                                                    if(soloContar == 0){
+                                                        texto += dat.decimal;
+                                                    }else{
+                                                        texto += ","+ dat.decimal;
+                                                    }
+                                                }else if(dat.tipo == 2){
+                                                    if(soloContar == 0){
+                                                        texto += dat.cadena;
+                                                    }else{
+                                                        texto += ","+ dat.cadena;
+                                                    }
+                                                }
+                                                soloContar++;
+                                            }
+                                            texto += "}\n";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    RESULT = texto + "]";
+                }else{
+                    System.out.println("la variable "+id+" no es de tipo archivo");
+                    errorSemantico("la variable "+id+" no es de tipo archivo");
+                    RESULT = -1;
+                }
+            }else{
+                System.out.println("la variable "+ id +" no existe");
+                errorSemantico("la variable "+ id +" no existe");
+                RESULT = -1;
+            }
+            :}
         ;
 
-GRA::= graficar parentesisA cadena coma cadena coma identificador coma cadena coma cadena parentesisC puntocoma{::}
+GRA::= graficar parentesisA cadena:nombre coma cadena:titulo coma identificador:id coma cadena:claveX coma cadena:claveY parentesisC puntocoma
+        {:  Object variable = variables.get(id);
+            if(variable != null){
+                if(variable instanceof ArchivoDatos){
+                    GraficaBarra grafica = new GraficaBarra();
+                    boolean ver = false;
+                    for(Clave cla: ((ArchivoDatos)variable).claves){
+                        if(cla.clave.equals(claveY)){
+                            if(cla.tipo == 0||cla.tipo == 1){
+                                ver = true;
+                            }
+                        }
+                    }
+                    if(ver){
+                        grafica.graficar(nombre, titulo, claveX, claveY, (ArchivoDatos)variable);
+                    }else{
+                        errorSemantico("tipo de la clave del eje Y");
+                    }
+                }else{
+                    errorSemantico("la variable "+ id +" no es de tipo archivo");
+                }
+            }else{
+                errorSemantico("la variable "+ id +" no existe");
+            }
+        :}
         ;
 
 DATOS::= num:num {:Dato dat = new Dato(0,"",Integer.parseInt(num),0); RESULT = dat;:}

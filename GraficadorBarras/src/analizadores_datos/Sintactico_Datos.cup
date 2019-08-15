@@ -73,7 +73,18 @@ LISTAR::= LISTAR llaveA LISTAMIX:regis llaveC {:
             }else{
                 errorSemantico("diferente largo de registro "); 
             }:}
-      |   llaveA LISTAMIX:regis llaveC {:datos.registros.add(regis);:}
+      |   llaveA LISTAMIX:regis llaveC {:
+            if(datos.claves.size() == regis.datos.size()){
+                datos.registros.add(regis);
+                int contador = 0;
+                for(Dato dato:regis.datos){
+                    datos.claves.get(contador).tipo = dato.tipo;
+                    contador++;
+                }
+            }else{
+                errorSemantico("error en cantidad de claves");
+                done_parsing();
+            }:}
     ;
 
 LISTAMIX::= LISTAMIX:regis  coma DATOS:dat {:regis.datos.add(dat); RESULT = regis;:}

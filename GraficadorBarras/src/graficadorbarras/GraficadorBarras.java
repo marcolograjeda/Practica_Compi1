@@ -19,6 +19,7 @@ public class GraficadorBarras {
     public static ArrayList<Token> erroresSintacticos = new ArrayList();
     public static ArrayList<String> erroresSemanticos = new ArrayList();
     public static HashMap<String, Object> variables = new HashMap();
+    public static String textoConsola = "";
     /**
      * @param args the command line arguments
      */

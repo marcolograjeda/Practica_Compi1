@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -179,10 +180,10 @@ public class Vista extends javax.swing.JFrame {
             File seleccion;
             if (abrir.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 JPanel panel = new JPanel();//Crea panel
-                panel.setBounds(0, 0, 300, 400);
+                panel.setBounds(0, 0, 700, 400);
                 panel.setLayout(null);
                 JTextArea txtArea = new JTextArea();//Crear textArea
-                txtArea.setBounds(5, 0, 310, 300);
+                txtArea.setBounds(5, 0, 580, 310);
                 JScrollBar barras = new JScrollBar();
                 barras.setBounds(0, 0, 375, 340);
                 barras.add(txtArea);
@@ -277,6 +278,8 @@ public class Vista extends javax.swing.JFrame {
         graficadorbarras.GraficadorBarras.erroresLexicos = new ArrayList();
         graficadorbarras.GraficadorBarras.erroresSintacticos = new ArrayList();
         graficadorbarras.GraficadorBarras.erroresSemanticos = new ArrayList();
+        graficadorbarras.GraficadorBarras.variables = new HashMap();
+        graficadorbarras.GraficadorBarras.textoConsola = "";
         int ind = pestañasPane.getSelectedIndex();
         JPanel panelito = (JPanel)pestañasPane.getComponent(ind);
         JTextArea txt = (JTextArea)panelito.getComponent(0);
@@ -290,6 +293,7 @@ public class Vista extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println(e);
         }
+        txtConsola.setText(graficadorbarras.GraficadorBarras.textoConsola);
         for(Token x:graficadorbarras.GraficadorBarras.erroresLexicos){
             System.out.println("Error lexico "+x.token);
         }

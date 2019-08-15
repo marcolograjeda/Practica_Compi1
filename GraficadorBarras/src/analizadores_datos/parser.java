@@ -250,7 +250,12 @@ class CUP$parser$actions {
 		int regisleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
 		int regisright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
 		Registro regis = (Registro)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
-		datos.registros.add(regis);
+		
+            if(datos.claves.size() == regis.datos.size()){
+                datos.registros.add(regis);
+            }else{
+                done_parsing();
+            }
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LISTAR",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
