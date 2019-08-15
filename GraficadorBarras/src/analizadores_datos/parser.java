@@ -253,7 +253,13 @@ class CUP$parser$actions {
 		
             if(datos.claves.size() == regis.datos.size()){
                 datos.registros.add(regis);
+                int contador = 0;
+                for(Dato dato:regis.datos){
+                    datos.claves.get(contador).tipo = dato.tipo;
+                    contador++;
+                }
             }else{
+                errorSemantico("error en cantidad de claves");
                 done_parsing();
             }
               CUP$parser$result = parser.getSymbolFactory().newSymbol("LISTAR",3, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);

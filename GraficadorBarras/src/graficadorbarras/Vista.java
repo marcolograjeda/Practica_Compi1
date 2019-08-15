@@ -303,11 +303,111 @@ public class Vista extends javax.swing.JFrame {
         for(String x:graficadorbarras.GraficadorBarras.erroresSemanticos){
             System.out.println(x);
         }
+        archivosHTML();
     }//GEN-LAST:event_btnCompilarMouseClicked
 
     /**
      * @param args the command line arguments
      */
+    
+    public void archivosHTML(){
+        File lexicos = new File("C:\\PracticaCompi\\ErroresLexicos.html");
+        try {
+            PrintWriter salida2 = new PrintWriter(lexicos);
+            String toke = "";
+            int cont = 1;
+            toke += "<!DOCTYPE html>\n <html>\n <head>\n <title>Lexicos</title>\n" +
+                "<meta http-equiv=\"Content - Type\" content=\"text / html; charset = UTF - 8\"/>\n" +
+                "<style type=\"text/css\">\n" +
+                "*{padding: 0%;margin: 0px;}body {font-family: Arial, Helvetica, sans-serif;background-color: #EBF4F7;padding: 0%;margin:"+
+                " 0%;}div.cuerpo {font-family: Arial, Helvetica, sans-serif;margin-left: 10%;margin-right: 10%;}h1.titulo {color: white;background-color: "+
+                "#07575B;text-align: center;}table.tabla {background: #65A5A5;text-align: center;border-collapse: collapse;width: 100%;}th{padding: 1%;}thead "+
+                "{background: #07575B;color: white;border-bottom: solid 5px #003B46;}tr.horario:hover td{background-color: #C4DFE6;}hr.linea{background-color:"+
+                " #C2331A;size: 3px;overflow: hidden;}div.cv{background-color: white;}img.redondeada{border-radius:150px;}td.na {text-align: left;}td.datos "+
+                "{text-align: right;color: #112233;}h3.inst {color: #212120;}</style>\n </head>\n <body>\n <div class=\"cuerpo\">\n <div>\n  <br>\n <h1 "+
+                "class=\"titulo\">ERRORES LEXICOS</h1>\n <br>\n <table class=\"tabla\">\n <thead>\n <tr>\n <th>#</th>\n <th>Lexema</th>\n <th>Tipo</th>\n <th>No.</th>\n "
+                + "<th>Fila</th>\n <th>Columna</th>\n </tr>\n</thead>";
+            String parte = "";
+            for(Token tok : GraficadorBarras.erroresLexicos){
+                parte += "<tbody><tr class=\"horario\">\n<td>"+Integer.toString(cont)+"</td>";
+                parte += "<td>"+tok.token+"</td>";
+                parte += "<td>"+tok.tipo+"</td>";
+                parte += "<td>"+tok.id+"</td>";
+                parte += "<td>"+tok.fila+"</td>";
+                parte += "<td>"+tok.columna+"</td>";
+                parte += "</tr>";
+                cont++;
+            }
+            toke += parte + "</tbody>\n </table>\n </div>\n </div>\n </ul>\n </div>\n </div>\n </body>\n </html>";
+            salida2.print(toke);
+            salida2.close();
+        } catch (FileNotFoundException ex) {
+            
+        }
+        File sinta = new File("C:\\PracticaCompi\\ErroresSintacticos.html");
+        try {
+            PrintWriter salida2 = new PrintWriter(sinta);
+            String toke = "";
+            int cont = 1;
+            toke += "<!DOCTYPE html>\n <html>\n <head>\n <title>Sintacticos</title>\n" +
+                "<meta http-equiv=\"Content - Type\" content=\"text / html; charset = UTF - 8\"/>\n" +
+                "<style type=\"text/css\">\n" +
+                "*{padding: 0%;margin: 0px;}body {font-family: Arial, Helvetica, sans-serif;background-color: #EBF4F7;padding: 0%;margin:"+
+                " 0%;}div.cuerpo {font-family: Arial, Helvetica, sans-serif;margin-left: 10%;margin-right: 10%;}h1.titulo {color: white;background-color: "+
+                "#07575B;text-align: center;}table.tabla {background: #65A5A5;text-align: center;border-collapse: collapse;width: 100%;}th{padding: 1%;}thead "+
+                "{background: #07575B;color: white;border-bottom: solid 5px #003B46;}tr.horario:hover td{background-color: #C4DFE6;}hr.linea{background-color:"+
+                " #C2331A;size: 3px;overflow: hidden;}div.cv{background-color: white;}img.redondeada{border-radius:150px;}td.na {text-align: left;}td.datos "+
+                "{text-align: right;color: #112233;}h3.inst {color: #212120;}</style>\n </head>\n <body>\n <div class=\"cuerpo\">\n <div>\n  <br>\n <h1 "+
+                "class=\"titulo\">ERRORES SINTACTICOS</h1>\n <br>\n <table class=\"tabla\">\n <thead>\n <tr>\n <th>#</th>\n <th>Lexema</th>\n <th>Tipo</th>\n <th>No.</th>\n "
+                + "<th>Fila</th>\n <th>Columna</th>\n </tr>\n</thead>";
+            String parte = "";
+            for(Token tok : GraficadorBarras.erroresSintacticos){
+                parte += "<tbody><tr class=\"horario\">\n<td>"+Integer.toString(cont)+"</td>";
+                parte += "<td>"+tok.token+"</td>";
+                parte += "<td>"+tok.tipo+"</td>";
+                parte += "<td>"+tok.id+"</td>";
+                parte += "<td>"+tok.fila+"</td>";
+                parte += "<td>"+tok.columna+"</td>";
+                parte += "</tr>";
+                cont++;
+            }
+            toke += parte + "</tbody>\n </table>\n </div>\n </div>\n </ul>\n </div>\n </div>\n </body>\n </html>";
+            salida2.print(toke);
+            salida2.close();
+        } catch (FileNotFoundException ex) {
+            
+        }
+        File seman = new File("C:\\PracticaCompi\\ErroresSemanticos.html");
+        try {
+            PrintWriter salida3 = new PrintWriter(seman);
+            String toke = "";
+            int cont = 1;
+            toke += "<!DOCTYPE html>\n <html>\n <head>\n <title>Lexicos</title>\n" +
+                "<meta http-equiv=\"Content - Type\" content=\"text / html; charset = UTF - 8\"/>\n" +
+                "<style type=\"text/css\">\n" +
+                "*{padding: 0%;margin: 0px;}body {font-family: Arial, Helvetica, sans-serif;background-color: #EBF4F7;padding: 0%;margin:"+
+                " 0%;}div.cuerpo {font-family: Arial, Helvetica, sans-serif;margin-left: 10%;margin-right: 10%;}h1.titulo {color: white;background-color: "+
+                "#07575B;text-align: center;}table.tabla {background: #65A5A5;text-align: center;border-collapse: collapse;width: 100%;}th{padding: 1%;}thead "+
+                "{background: #07575B;color: white;border-bottom: solid 5px #003B46;}tr.horario:hover td{background-color: #C4DFE6;}hr.linea{background-color:"+
+                " #C2331A;size: 3px;overflow: hidden;}div.cv{background-color: white;}img.redondeada{border-radius:150px;}td.na {text-align: left;}td.datos "+
+                "{text-align: right;color: #112233;}h3.inst {color: #212120;}</style>\n </head>\n <body>\n <div class=\"cuerpo\">\n <div>\n  <br>\n <h1 "+
+                "class=\"titulo\">ERRORES SEMANTICOS</h1>\n <br>\n <table class=\"tabla\">\n <thead>\n <tr>\n <th>#</th>\n\n "
+                + "<th>Error</th>\n <th>Fila</th>\n </tr>\n</thead>";
+            String parte = "";
+            for(String tok : GraficadorBarras.erroresSemanticos){
+                parte += "<tbody><tr class=\"horario\">\n<td>"+Integer.toString(cont)+"</td>";
+                parte += "<td>"+tok+"</td>";
+                parte += "</tr>";
+                cont++;
+            }
+            toke += parte + "</tbody>\n </table>\n </div>\n </div>\n </ul>\n </div>\n </div>\n </body>\n </html>";
+            salida3.print(toke);
+            salida3.close();
+        } catch (FileNotFoundException ex) {
+            
+        }
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
