@@ -94,7 +94,7 @@ EXPDA::= identificador:id {:
         | decimal:decimal {:String result = "" + decimal; RESULT = result;:}
         ;
 
-VAR::=  TIPO identificador:id igual FUN:funcion puntocoma {:
+VAR::=  TIPO identificador:id {:System.out.println("Entre a la variable");:} igual FUN:funcion puntocoma {:System.out.println("Entre a la variable");
             if(funcion instanceof Integer){
                 if((Integer)funcion != -1){
                     agregarVariable(id,funcion);
